@@ -40,6 +40,7 @@
         src: ../../process-exporter.yml
         dest: /opt/pet-project/process-exporter.yml
         mode: '0644'
+        force: yes
 
     - name: Run docker-compose up
       docker_compose:
