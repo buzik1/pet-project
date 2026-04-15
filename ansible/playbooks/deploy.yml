@@ -1,0 +1,42 @@
+---
+- name: Deploy Docker Compose application with monitoring stack
+  hosts: all
+  become: yes
+  tasks:
+    - name: Ensure Docker and Docker Compose are installed
+      apt:
+        name:
+          - docker.io
+          - docker-compose
+        state: present
+        update_cache: yes
+
+    - name: Ensure Docker service is running
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Create project directory
+      file:
+        path: /opt/pet-project
+        state: directory
+        mode: '0755'
+
+    - name: Copy docker-compose.yml to target
+      copy:
+        src: ../../docker-compose.yml
+        dest: /opt/pet-project/docker-compose.yml
+        mode: '0644'
+
+    - name: Copy prometheus.yml to target
+      copy:
+        src: ../../prometheus.yml
+        dest: /opt/pet-project/prometheus.yml
+        mode: '0644'
+
+    - name: Run docker-compose up
+      docker_compose:
+        project_src: /opt/pet-project
+        state: present
+        restarted: yes
