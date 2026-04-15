@@ -35,6 +35,12 @@
         dest: /opt/pet-project/prometheus.yml
         mode: '0644'
 
+    - name: Copy process-exporter.yml to target
+      copy:
+        src: ../../process-exporter.yml
+        dest: /opt/pet-project/process-exporter.yml
+        mode: '0644'
+
     - name: Run docker-compose up
       docker_compose:
         project_src: /opt/pet-project
