@@ -23,6 +23,12 @@
         state: directory
         mode: '0755'
 
+    - name: Debug - list root files in workspace
+      command: ls -la ../../
+      register: workspace_files
+
+    - debug: var=workspace_files.stdout_lines
+
     - name: Copy docker-compose.yml to target
       copy:
         src: ../../docker-compose.yml
