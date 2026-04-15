@@ -35,6 +35,23 @@ services:
       - network_monitoring
     restart: unless-stopped
 
+  process_exporter:
+    image: ncabatoff/process-exporter:latest
+    container_name: process_exporter
+    hostname: process_exporter
+    ports:
+      - "9256:9256"
+    privileged: true
+    volumes:
+      - /proc:/host/proc:ro
+      - ./process-exporter.yml:/config/config.yml:ro
+    command:
+      - '-procfs=/host/proc'
+      - '-config.path=/config/config.yml'
+    networks:
+      - network_monitoring
+    restart: unless-stopped
+
 volumes:
   grafana-storage:
   prometheus-data:
