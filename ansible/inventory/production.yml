@@ -3,3 +3,4 @@ all:
     vm-1:
       ansible_host: 111.88.147.85
       ansible_user: nbuzik
+#
