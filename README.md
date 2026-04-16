@@ -18,12 +18,12 @@
 
 | Сервер | Роль | Компоненты |
 |--------|------|------------|
-| **`vm-ansible`** | Control Plane | Jenkins (CI/CD), Ansible, Node Exporter, Process Exporter |
+| **`vm-ansible`** | Control Plane | Jenkins (CI/CD), Ansible |
 | **`vm-1`** | Monitoring Stack | Prometheus, Grafana, Node Exporter, Process Exporter |
 
 **Схема работы CI/CD:**
 
-1. Разработчик вносит изменения в конфигурации на локальном компьютере и выполняет `git push`.
+1. Инженер вносит изменения в конфигурации на локальном компьютере и выполняет `git push`.
 2. GitHub отправляет Webhook в Jenkins.
 3. Jenkins выгружает актуальный код из репозитория.
 4. Ansible Playbook доставляет файлы на целевые серверы и перезапускает Docker-сервисы.
