@@ -58,6 +58,12 @@
     #     dest: /opt/pet-project/alerts.yml
     #     mode: '0644'
 
+    - name: Remove orphaned containers
+      command: docker-compose down --remove-orphans
+      args:
+        chdir: /opt/pet-project
+      ignore_errors: yes
+
     - name: Run docker-compose up
       docker_compose:
         project_src: /opt/pet-project
