@@ -1,19 +1,19 @@
-global:
-  resolve_timeout: 5m
+# global:
+#   resolve_timeout: 5m
 
-route:
-  group_by: ['alertname', 'job']
-  group_wait: 10s
-  group_interval: 10s
-  repeat_interval: 24h
-  receiver: 'telegram'
+# route:
+#   group_by: ['alertname', 'job']
+#   group_wait: 10s
+#   group_interval: 10s
+#   repeat_interval: 24h
+#   receiver: 'telegram'
 
-receivers:
-  - name: 'telegram'
-    telegram_configs:
-      - bot_token: '***'
-        chat_id: 129841255
-        parse_mode: 'HTML'
-        message: |
-          <b>{{ .Status | toUpper }}</b> - {{ .Annotations.summary }}
-          {{ .Annotations.description }}
+# receivers:
+#   - name: 'telegram'
+#     telegram_configs:
+#       - bot_token: '{{ .ExternalURL | default "" }}'
+#         chat_id: 129841255
+#         parse_mode: 'HTML'
+#         message: |
+#           <b>{{ .Status | toUpper }}</b> - {{ .Annotations.summary }}
+#           {{ .Annotations.description }}
