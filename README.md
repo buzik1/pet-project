@@ -19,7 +19,7 @@
 | Сервер | Роль | Компоненты |
 |--------|------|------------|
 | **`vm-ansible`** | Control Plane | Jenkins (CI/CD), Ansible |
-| **`vm-1`** | Monitoring Stack | Prometheus, Grafana, Node Exporter, Process Exporter |
+| **`vm-1`** | Monitoring Stack | Prometheus, Grafana, Node Exporter, Process Exporter, cAdvisor |
 
 **Схема работы CI/CD:**
 
@@ -43,6 +43,7 @@
 | **Grafana** | Визуализация данных (дашборды) |
 | **Node Exporter** | Метрики операционной системы (CPU, RAM, диск, сеть) |
 | **Process Exporter** | Детальные метрики по процессам |
+| **cAdvisor** | Мониторинг контейнеров |
 
 
 ---
@@ -54,6 +55,7 @@
 - [x] Мониторинг серверов
 - [x] Сбор метрик ОС через Node Exporter
 - [x] Сбор метрик процессов через Process Exporter
+- [x] Сбор метрик контейнеров через cAdvisor
 - [x] Визуализация данных в Grafana
 
 ---
