@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    triggers {
+        githubPush()
+    }
+
     environment {
         ANSIBLE_HOST_KEY_CHECKING = 'false'
     }
