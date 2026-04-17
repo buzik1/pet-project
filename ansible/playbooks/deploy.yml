@@ -46,6 +46,18 @@
         dest: /opt/pet-project/process-exporter.yml
         mode: '0644'
 
+    - name: Copy alertmanager.yml to target
+      copy:
+        src: ../../alertmanager.yml
+        dest: /opt/pet-project/alertmanager.yml
+        mode: '0644'
+
+    - name: Copy alerts.yml to target
+      copy:
+        src: ../../alerts.yml
+        dest: /opt/pet-project/alerts.yml
+        mode: '0644'
+
     - name: Run docker-compose up
       docker_compose:
         project_src: /opt/pet-project
