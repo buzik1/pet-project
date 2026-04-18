@@ -3,4 +3,4 @@ all:
     vm-mon1:
       ansible_host: 111.88.157.49
       ansible_user: nbuzik
-      ansible_ssh_private_key_file: /home/nbuzik/.ssh/ansible_key
+      ansible_ssh_private_key_file: /var/lib/jenkins/.ssh/ansible_key
