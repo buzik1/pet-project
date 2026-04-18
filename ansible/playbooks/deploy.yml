@@ -52,6 +52,17 @@
         dest: /opt/pet-project/alertmanager.yml
         mode: '0644'
 
+    # - name: Ensure no file or directory exists at alerts.yml path
+    #   file:
+    #     path: /opt/pet-project/alerts.yml
+    #     state: absent
+
+    # - name: Copy alerts.yml to target
+    #   copy:
+    #     src: ../../alerts.yml
+    #     dest: /opt/pet-project/alerts.yml
+    #     mode: '0644'
+
     - name: Remove orphaned containers
       command: docker-compose down --remove-orphans
       args:
