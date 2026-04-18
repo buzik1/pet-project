@@ -1,11 +1,11 @@
-# groups:
-#   - name: basic_alerts
-#     rules:
-#       - alert: memory_used
-#         expr: round((node_memory_MemTotal_bytes- node_memory_MemFree_bytes - (node_memory_Cached_bytes + node_memory_Buffers_bytes + node_memory_SReclaimable_bytes)) /1024/1024) > 200
-#         for: 10s
-#         labels:
-#           severity: critical
-#         annotations:
-#           summary: "Memory used={{ $value }}Mb"
-#           description: "vm1"
+groups:
+  - name: basic_alerts
+    rules:
+      - alert: memory_used
+        expr: round((node_memory_MemTotal_bytes- node_memory_MemFree_bytes - (node_memory_Cached_bytes + node_memory_Buffers_bytes + node_memory_SReclaimable_bytes)) /1024/1024) > 200
+        for: 10s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Memory used={{ $value }}Mb"
+          description: "vm-1"
