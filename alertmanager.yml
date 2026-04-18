@@ -15,5 +15,11 @@ receivers:
         chat_id: 129841255
         parse_mode: 'HTML'
         message: |
-          <b>{{ .Status | toUpper }}</b> - {{ .Annotations.summary }}
-          {{ .Annotations.description }}
+          <b>{{ .Status | toUpper }}</b>
+          {{ range .Alerts }}
+          ———
+          <b>Alert:</b> {{ .Labels.alertname }}
+          <b>Instance:</b> {{ .Labels.instance }}
+          <b>Summary:</b> {{ .Annotations.summary }}
+          <b>Description:</b> {{ .Annotations.description }}
+          {{ end }}
