@@ -10,11 +10,116 @@ groups:
           summary: "instance {{ $labels.job }} is a down"
           description: "instance_is_down"
 
-      # - alert: memory_used
-      #   expr: round((node_memory_MemTotal_bytes- node_memory_MemFree_bytes - (node_memory_Cached_bytes + node_memory_Buffers_bytes + node_memory_SReclaimable_bytes)) /1024/1024) > 200
-      #   for: 10s
-      #   labels:
-      #     severity: critical
-      #   annotations:
-      #     summary: "Memory used={{ $value }}Mb"
-      #     description: "vm-mon1"
+  - name: node_exporter
+    rules:
+      - alert: HostHighCpuLoad
+        expr: (100 - (avg by(instance, job) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)) > 80
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Высокая загрузка CPU на {{ $labels.job }}"
+          description: "Загрузка процессора превышает 80% (текущее значение: {{ $value }}%) на протяжении 5 минут."
+
+      - alert: HostOutOfMemory
+        expr: round((node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100) < 10
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Нехватка оперативной памяти на {{ $labels.job }}"
+          description: "Доступно менее 10% ОЗУ (текущее значение: {{ $value }}%)."
+
+      - alert: HostOutOfDiskSpace
+        expr: round((node_filesystem_avail_bytes{ mountpoint="/etc/hosts"} / node_filesystem_size_bytes{ mountpoint="/etc/hosts"}) * 100) < 10
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Заканчивается место на диске ({{ $labels.job }})"
+          description: "Свободно менее 10% на корневом разделе / (текущее значение: {{ $value }}%)."
+
+      - alert: HostHighMemoryUsage
+        expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 90
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Высокое потребление памяти на {{ $labels.job }}"
+          description: "Использование ОЗУ превышает 90% (текущее значение: {{ $value }}%)"
+
+  - name: process_exporter
+    rules:
+      - alert: CriticalProcessDown
+        expr: namedprocess_namegroup_num_procs{groupname=~"prometheus|alertmanager|grafana"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Критический процесс {{ $labels.groupname }} не запущен"
+          description: "Процесс {{ $labels.groupname }} не обнаружен на сервере {{ $labels.job }} более 1 минуты."
+
+      - alert: ProcessHighCpuUsage
+        expr: rate(namedprocess_namegroup_cpu_seconds_total[10m]) * 100 > 50
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Высокая загрузка CPU процессом {{ $labels.groupname }}"
+          description: "Процесс {{ $labels.groupname }} потребляет более 50% CPU на протяжении 10 минут (текущее значение: {{ $value }}%)"
+
+      - alert: ProcessHighMemoryUsage
+        expr: namedprocess_namegroup_memory_bytes{memtype="resident"} / 1024 / 1024 > 1024
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Высокое потребление памяти процессом {{ $labels.groupname }}"
+          description: "Процесс {{ $labels.groupname }} потребляет более 1 ГБ резидентной памяти (текущее значение: {{ $value }}МБ)"
+
+  - name: cadvisor
+    rules:
+      - alert: ContainerDown
+        expr: absent(container_last_seen{name=~"prometheus|grafana|node_exporter|process_exporter|cadvisor|alertmanager"})
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Контейнер {{ $labels.name }} не запущен"
+          description: "Контейнер {{ $labels.name }} отсутствует в метриках более 2 минут на сервере {{ $labels.job }}"
+
+      - alert: ContainerHighCpuUsage
+        expr: (sum(rate(container_cpu_usage_seconds_total{name!=""}[5m])) by (name)) * 100 > 80
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Высокая загрузка CPU контейнером {{ $labels.name }}"
+          description: "Контейнер {{ $labels.name }} потребляет более 80% CPU (текущее значение: {{ $value }}%)"
+
+      - alert: ContainerHighMemoryUsage
+        expr: (container_memory_usage_bytes{name!=""}/1024/1024) > 600
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Высокое потребление памяти контейнером {{ $labels.name }}"
+          description: "Контейнер {{ $labels.name }} использует более 90% выделенной памяти или более 600мб (текущее значение: {{ $value }}мб)"
+
+      - alert: ContainerRestartingTooMuch
+        expr: changes(container_start_time_seconds{name=~"prometheus|grafana|node_exporter|process_exporter|cadvisor|alertmanager"}[2m]) > 0
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Контейнер {{ $labels.name }} был перезапущен"
+          description: "Зафиксирована смена идентификатора контейнера {{ $labels.name }}, что указывает на его перезапуск или пересоздание"
+
+      - alert: ContainerRestartingTooMuch
+        expr: (time() - container_start_time_seconds{name!=""}) < 300
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Контейнер {{ $labels.name }} работает менее 5 минут"
+          description: "Время жизни контейнера {{ $labels.name }} составляет менее 300 секунд. Возможно, он находится в цикле постоянных перезапусков."

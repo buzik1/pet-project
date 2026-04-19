@@ -60,8 +60,8 @@
 - [x] Сбор метрик процессов через Process Exporter
 - [x] Сбор метрик контейнеров через cAdvisor
 - [x] Визуализация данных в Grafana
-- [x] **Настроена отправка алертов из Prometheus в Alertmanager**
-- [x] **Интеграция Alertmanager со Slack через Incoming Webhook**
+- [x] Настроена отправка алертов из Prometheus в Alertmanager
+- [x] Интеграция Alertmanager со Slack через Incoming Webhook
 
 ---
 
