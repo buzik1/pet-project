@@ -4,6 +4,8 @@
 ![Automation](https://img.shields.io/badge/Automation-Ansible-black?logo=ansible)
 ![Infra](https://img.shields.io/badge/Infrastructure-Docker-blue?logo=docker)
 ![Monitoring](https://img.shields.io/badge/Monitoring-Prometheus-orange?logo=prometheus)
+![Alerting](https://img.shields.io/badge/Alerting-Alertmanager-red?logo=prometheus)
+![Chat](https://img.shields.io/badge/Chat-Slack-4A154B?logo=slack)
 
 > **Ключевая особенность:** Вся конфигурация инфраструктуры и пайплайн деплоя хранятся в Git.  
 > Изменение настроек мониторинга или добавление новых экспортеров, целей происходит автоматически при пуше в репозиторий.
@@ -19,7 +21,7 @@
 | Сервер | Роль | Компоненты |
 |--------|------|------------|
 | **`vm-ansible`** | Control Plane | Jenkins (CI/CD), Ansible |
-| **`vm-1`** | Monitoring Stack | Prometheus, Grafana, Node Exporter, Process Exporter, cAdvisor |
+| **`vm-mon1`** | Monitoring Stack | Prometheus, Grafana, Alertmanager, Node Exporter, Process Exporter, cAdvisor |
 
 **Схема работы CI/CD:**
 
@@ -40,6 +42,7 @@
 | **Ansible** | Управление конфигурацией (копирование файлов, запуск `docker-compose`) |
 | **Docker Compose** | Контейнеризация и оркестрация сервисов мониторинга |
 | **Prometheus** | Сбор и хранение метрик с экспортеров |
+| **Alertmanager** | Обработка и маршрутизация алертов, отправка уведомлений в Slack |
 | **Grafana** | Визуализация данных (дашборды) |
 | **Node Exporter** | Метрики операционной системы (CPU, RAM, диск, сеть) |
 | **Process Exporter** | Детальные метрики по процессам |
@@ -57,6 +60,8 @@
 - [x] Сбор метрик процессов через Process Exporter
 - [x] Сбор метрик контейнеров через cAdvisor
 - [x] Визуализация данных в Grafana
+- [x] **Настроена отправка алертов из Prometheus в Alertmanager**
+- [x] **Интеграция Alertmanager со Slack через Incoming Webhook**
 
 ---
 
@@ -88,8 +93,7 @@
 
 
 ## 📈 Планы по развитию
-- [ ] **Alertmanager**  
-  Настройка алертов при падении сервисов, высокой нагрузке или нехватке дискового пространства. Уведомления в Telegram.
+
 - [ ] **Grafana Provisioning**  
   Автоматическая загрузка дашбордов и источников данных из Git, чтобы настройки Grafana не терялись при пересоздании контейнера.
 - [ ] **Сбор логов (Loki + Promtail)**  
@@ -98,5 +102,3 @@
   Переход от статического списка хостов к динамическому (скрипт или плагин), чтобы автоматически подхватывать новые серверы.
 - [ ] **Healthcheck для контейнеров**  
   Добавление `healthcheck` в `docker-compose.yml` для автоматического перезапуска зависших сервисов.
-- [ ] **Нотификации Jenkins в Telegram**  
-  Получение уведомлений о статусе сборки прямо в мессенджер.
