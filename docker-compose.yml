@@ -42,8 +42,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
-    env_file:
-      - .env
+      - ./secrets/slack_webhook_url:/etc/alertmanager/secrets/slack_webhook_url:ro
     command:
       - '--config.file=/etc/alertmanager/alertmanager.yml'
       - '--storage.path=/alertmanager'
