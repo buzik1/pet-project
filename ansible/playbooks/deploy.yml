@@ -46,10 +46,10 @@
         dest: /opt/pet-project/process-exporter.yml
         mode: '0644'
 
-    - name: Copy alertmanager.yml to target
+    - name: Copy alertmanager.yml.tmpl to target
       copy:
-        src: ../../alertmanager.yml
-        dest: /opt/pet-project/alertmanager.yml
+        src: ../../alertmanager.yml.tmpl
+        dest: /opt/pet-project/alertmanager.yml.tmpl
         mode: '0644'
 
     - name: Ensure no file or directory exists at Alerts.yml path
