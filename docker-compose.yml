@@ -44,8 +44,8 @@ services:
       - ./alertmanager.yml.tmpl:/etc/alertmanager/alertmanager.yml.tmpl:ro
     env_file:
       - .env
+    entrypoint: /bin/sh
     command:
-      - /bin/sh
       - -c
       - |
         envsubst '$$SLACK_WEBHOOK_URL' < /etc/alertmanager/alertmanager.yml.tmpl > /etc/alertmanager/alertmanager.yml
