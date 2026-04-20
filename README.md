@@ -31,7 +31,8 @@
 4. Ansible Playbook доставляет файлы на целевые серверы и перезапускает Docker-сервисы.
 5. Изменения применяются автоматически, без ручного вмешательства.
 
-<img width="1083" height="1157" alt="Архитектура мониторинга" src="https://github.com/user-attachments/assets/c6d6cd64-b3dd-4feb-a036-f3e2e51237f8" />
+<img width="1083" height="1157" alt="Архитектура мониторинга" src="https://github.com/user-attachments/assets/ed0ce9a5-a738-49f1-b66e-9c7ee8b4e239" />
+
 
 
 ---
