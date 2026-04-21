@@ -30,11 +30,38 @@ services:
       - "3000:3000"
     volumes:
       - ./grafana-data:/var/lib/grafana
+      - ./grafana-provisioning/datasources:/etc/grafana/provisioning/datasources:ro
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
     networks:
       - network_monitoring
     restart: unless-stopped
+
+  loki:
+    image: grafana/loki:2.9.0
+    container_name: loki
+    restart: unless-stopped
+    volumes:
+      - ./loki-config.yml:/etc/loki/local-config.yaml:ro
+      - loki-data:/loki
+    command: -config.file=/etc/loki/local-config.yaml
+    ports:
+      - "3100:3100"
+    networks:
+      - network_monitoring
+
+  promtail:
+    image: grafana/promtail:2.9.0
+    container_name: promtail
+    restart: unless-stopped
+    volumes:
+      - /var/log:/var/log:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./promtail-config.yml:/etc/promtail/config.yml:ro
+    command: -config.file=/etc/promtail/config.yml
+    networks:
+      - network_monitoring    
 
   alertmanager:
     image: prom/alertmanager:latest
@@ -86,6 +113,7 @@ services:
 volumes:
   grafana-storage:
   prometheus-data:
+  loki-data:
 
 networks:
   network_monitoring:

@@ -63,6 +63,24 @@
         dest: /opt/pet-project/Alerts.yml
         mode: '0644'
 
+    - name: Copy loki-config.yml to target
+      copy:
+        src: ../../loki-config.yml
+        dest: /opt/pet-project/loki-config.yml
+        mode: '0644'
+
+    - name: Copy promtail-config.yml to target
+      copy:
+        src: ../../promtail-config.yml
+        dest: /opt/pet-project/promtail-config.yml
+        mode: '0644'
+
+    - name: Copy Grafana provisioning directory
+      copy:
+        src: ../../grafana-provisioning/
+        dest: /opt/pet-project/grafana-provisioning/
+        mode: '0755'
+
     - name: Remove orphaned containers
       command: docker-compose down --remove-orphans
       args:
