@@ -16,11 +16,15 @@ common:
 
 ingester:
   lifecycler:
+    address: 127.0.0.1
     ring:
       kvstore:
         store: inmemory
       replication_factor: 1
-    num_tokens: 1
+    final_sleep: 0s
+  chunk_idle_period: 5m
+  chunk_retain_period: 30s
+  max_transfer_retries: 0
 
 schema_config:
   configs:
@@ -33,5 +37,5 @@ schema_config:
         period: 24h
 
 limits_config:
-  retention_period: 24h
+  retention_period: 168h
   max_entries_limit_per_query: 5000
