@@ -36,5 +36,3 @@ schema_config:
 limits_config:
   retention_period: 168h
   max_entries_limit_per_query: 5000
-  chunk_idle_period: 5m
-  chunk_retain_period: 30s
