@@ -60,6 +60,8 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./promtail-config.yml:/etc/promtail/config.yml:ro
     command: -config.file=/etc/promtail/config.yml
+    ports:
+      - "9080:9080"
     networks:
       - network_monitoring    
 
