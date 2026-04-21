@@ -34,5 +34,5 @@ schema_config:
         period: 24h
 
 limits_config:
-  retention_period: 168h
+  retention_period: 24h
   max_entries_limit_per_query: 5000
