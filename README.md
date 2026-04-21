@@ -6,6 +6,8 @@
 ![Monitoring](https://img.shields.io/badge/Monitoring-Prometheus-orange?logo=prometheus)
 ![Alerting](https://img.shields.io/badge/Alerting-Alertmanager-red?logo=prometheus)
 ![Chat](https://img.shields.io/badge/Chat-Slack-4A154B?logo=slack)
+![Loki](https://img.shields.io/badge/Logs-Loki-orange?logo=grafana)
+![Promtail](https://img.shields.io/badge/Logs-Promtail-yellow?logo=grafana)
 
 > **Ключевая особенность:** Вся конфигурация инфраструктуры и пайплайн деплоя хранятся в Git.  
 > Изменение настроек мониторинга или добавление новых экспортеров, целей происходит автоматически при пуше в репозиторий.
@@ -21,7 +23,7 @@
 | Сервер | Роль | Компоненты |
 |--------|------|------------|
 | **`vm-ansible`** | Control Plane | Jenkins (CI/CD), Ansible |
-| **`vm-mon1`** | Monitoring Stack | Prometheus, Grafana, Alertmanager, Node Exporter, Process Exporter, cAdvisor |
+| **`vm-mon1`** | Monitoring Stack | Prometheus, Grafana, Alertmanager, Node Exporter, Process Exporter, cAdvisor, Loki, Promtail |
 
 **Схема работы CI/CD:**
 
@@ -31,7 +33,10 @@
 4. Ansible Playbook доставляет файлы на целевые серверы и перезапускает Docker-сервисы.
 5. Изменения применяются автоматически, без ручного вмешательства.
 
-<img width="1083" height="1157" alt="Архитектура мониторинга" src="https://github.com/user-attachments/assets/ed0ce9a5-a738-49f1-b66e-9c7ee8b4e239" />
+<img width="778" height="1026" alt="арх схема" src="https://github.com/user-attachments/assets/1917b1e3-23c3-4ed6-8520-7daa89fac99b" />
+
+
+
 
 
 
@@ -47,7 +52,9 @@
 | **Docker Compose** | Контейнеризация и оркестрация сервисов мониторинга |
 | **Prometheus** | Сбор и хранение метрик с экспортеров |
 | **Alertmanager** | Обработка и маршрутизация алертов, отправка уведомлений в Slack |
-| **Grafana** | Визуализация данных (дашборды) |
+| **Loki** | Инструмент агрегации и хранения логов |
+| **Promtail** | Агент для сбора логов, их парсинга и отправки в Loki |
+| **Grafana** | Визуализация данных (дашборды) + настроена отправка нотификаций на основе логов из Grafana в Alertmanager |
 | **Node Exporter** | Метрики операционной системы (CPU, RAM, диск, сеть) |
 | **Process Exporter** | Детальные метрики по процессам |
 | **cAdvisor** | Мониторинг контейнеров |
@@ -66,6 +73,9 @@
 - [x] Визуализация данных в Grafana
 - [x] Настроена отправка алертов из Prometheus в Alertmanager
 - [x] Интеграция Alertmanager со Slack через Incoming Webhook
+- [x] Интеграция Grafana с Alertmanager для отправки нотификаций на основе логов
+- [x] Централизованный сбор логов контейнеров с помощью Promtail
+- [x] Хранение логов в Loki
 
 ---
 
@@ -100,8 +110,6 @@
 
 - [ ] **Grafana Provisioning**  
   Автоматическая загрузка дашбордов и источников данных из Git, чтобы настройки Grafana не терялись при пересоздании контейнера.
-- [ ] **Сбор логов (Loki + Promtail)**  
-  Централизованный сбор и просмотр логов контейнеров прямо в интерфейсе Grafana.
 - [ ] **Динамический инвентарь Ansible**  
   Переход от статического списка хостов к динамическому (скрипт или плагин), чтобы автоматически подхватывать новые серверы.
 - [ ] **Healthcheck для контейнеров**  
