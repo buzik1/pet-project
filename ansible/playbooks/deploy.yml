@@ -84,7 +84,7 @@
     - name: Copy loki-rules.yml to target
       copy:
         src: ../../loki-rules.yml
-        dest: /opt/pet-project/loki-rules.yml
+        dest: /opt/pet-project/loki-alerts.yml
         mode: '0644'
 
     - name: Remove orphaned containers
