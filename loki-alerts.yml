@@ -2,7 +2,7 @@ groups:
   - name: loki_alerts
     rules:
       - alert: HighErrorRate
-        expr: sum by (container) (count_over_time({container=~".+"} | logfmt | level="error" [10m])) > 5
+        expr: sum by (container) (count_over_time({container=~".+"}| logfmt | level = "error" | msg !~ "executing query" [10m])) > 10
         for: 1m
         labels:
           severity: warning
