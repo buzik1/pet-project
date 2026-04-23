@@ -7,10 +7,10 @@
 ![Alerting](https://img.shields.io/badge/Alerting-Alertmanager-red?logo=prometheus)
 ![Chat](https://img.shields.io/badge/Chat-Slack-4A154B?logo=slack)
 ![Loki](https://img.shields.io/badge/Logs-Loki-orange?logo=grafana)
-![Promtail](https://img.shields.io/badge/Logs-Promtail-yellow?logo=grafana)
+![Visualization](https://img.shields.io/badge/Visualization-Grafana-orange?logo=grafana)
 
-> **Ключевая особенность:** Вся конфигурация инфраструктуры и пайплайн деплоя хранятся в Git.  
-> Изменение настроек мониторинга или добавление новых экспортеров, целей происходит автоматически при пуше в репозиторий.
+> **Ключевая особенность:** Вся конфигурация инфраструктуры и пайплайн деплоя хранятся в GitHub.  
+> Изменение настроек мониторинга или добавление новых целей, экспортеров происходит автоматически при пуше в репозиторий.
 
 Проект демонстрирует развертывание полноценного стека мониторинга с использованием современного подхода **CI/CD** и принципов **Infrastructure as Code (IaC)**.
 
@@ -22,7 +22,7 @@
 
 | Сервер | Роль | Компоненты |
 |--------|------|------------|
-| **`vm-ansible`** | Control Plane | Jenkins (CI/CD), Ansible |
+| **`vm-ansible`** | Control Plane | Jenkins (CI/CD), Ansible, Git |
 | **`vm-mon1`** | Monitoring Stack | Prometheus, Grafana, Alertmanager, Node Exporter, Process Exporter, cAdvisor, Loki, Promtail |
 
 **Схема работы CI/CD:**
@@ -50,7 +50,7 @@
 | **Jenkins** | Пайплайн деплоя (`Jenkinsfile`), обработка Webhook'ов |
 | **Ansible** | Управление конфигурацией (копирование файлов, запуск `docker-compose`) |
 | **Docker Compose** | Контейнеризация и оркестрация сервисов мониторинга |
-| **Prometheus** | Сбор и хранение метрик с экспортеров |
+| **Prometheus** | Сбор и хранение метрик |
 | **Alertmanager** | Обработка и маршрутизация алертов, отправка уведомлений в Slack |
 | **Loki** | Инструмент агрегации и хранения логов |
 | **Promtail** | Агент для сбора логов, их парсинга и отправки в Loki |
@@ -104,6 +104,18 @@
       path: /opt/pet-project/process-exporter.yml
       state: absent
 
+### 3. Авторезолв алертов Grafana и переход на Loki Ruler
+
+**Проблема:** Алерты, созданные в интерфейсе Grafana на основе логов Loki, автоматически разрешались (auto-resolved) через 5 минут после срабатывания, даже если проблема сохранялась. 
+
+**Решение:**
+- Алерты по логам были перенесены из UI Grafana Alerting во встроенный компонент **Ruler** в Loki.
+- Создан файл `loki-alerts.yml`, содержащий правила алертов в формате Prometheus.
+- В конфигурации Loki (`loki-config.yml`) добавлена секция `ruler` с подключением правил и указанием Alertmanager.
+- Файл правил монтируется в контейнер Loki через volume в `docker-compose.yml`.
+- Loki теперь самостоятельно оценивает правила и напрямую отправляет алерты в Alertmanager, минуя Grafana.
+
+Таким образом, алерты по логам обрабатываются нативно в Loki и не зависят от особенностей Grafana Alerting, что исключило ложные авторезолвы и повысило надёжность системы оповещения.
 
 
 ## 📈 Планы по развитию
