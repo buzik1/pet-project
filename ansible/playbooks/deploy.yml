@@ -83,7 +83,7 @@
 
     - name: Copy loki-rules.yml to target
       copy:
-        src: ../../loki-rules.yml
+        src: ../../loki-alerts.yml
         dest: /opt/pet-project/loki-alerts.yml
         mode: '0644'
 
