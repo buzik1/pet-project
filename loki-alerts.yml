@@ -2,10 +2,10 @@ groups:
   - name: loki_alerts
     rules:
       - alert: HighErrorRate
-        expr: sum by (container) (count_over_time({container=~".+"} | logfmt | level="info" [10m])) > 10
+        expr: sum by (container) (count_over_time({container=~".+"} | logfmt | level="error" [10m])) > 5
         for: 1m
         labels:
           severity: warning
         annotations:
-          summary: "High error rate in logs in {{ $labels.container }}"
-          description: "Container has {{ $value }} errors in the last 5 minutes"
+          summary: "Ошибки в логах контейнера {{ $labels.container }}"
+          description: "Container has {{ $value }} errors in the last 10 minutes"
