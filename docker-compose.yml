@@ -44,6 +44,7 @@ services:
     volumes:
       - ./loki-config.yml:/etc/loki/local-config.yaml:ro
       - loki-data:/loki
+      - ./loki-rules.yml:/loki/rules/fake/loki-alerts.yml:ro
     command: -config.file=/etc/loki/local-config.yaml
     ports:
       - "3100:3100"

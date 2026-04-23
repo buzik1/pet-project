@@ -33,6 +33,18 @@ schema_config:
         prefix: index_
         period: 24h
 
+ruler:
+  storage:
+    type: local
+    local:
+      directory: /loki/rules
+  rule_path: /loki/rules-temp
+  alertmanager_url: http://alertmanager:9093
+  ring:
+    kvstore:
+      store: inmemory
+  enable_api: true
+
 limits_config:
   retention_period: 24h
   max_entries_limit_per_query: 5000
