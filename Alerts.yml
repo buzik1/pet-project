@@ -98,13 +98,13 @@ groups:
           description: "Контейнер {{ $labels.name }} потребляет более 80% CPU (текущее значение: {{ $value }}%)"
 
       - alert: ContainerHighMemoryUsage
-        expr: (container_memory_usage_bytes{name!=""}/1024/1024) > 600
+        expr: (container_memory_usage_bytes{name!=""}/1024/1024) > 800
         for: 10m
         labels:
           severity: warning
         annotations:
           summary: "Высокое потребление памяти контейнером {{ $labels.name }}"
-          description: "Контейнер {{ $labels.name }} использует более 600мб (текущее значение: {{ $value }}мб)"
+          description: "Контейнер {{ $labels.name }} использует более 800мб (текущее значение: {{ $value }}мб)"
 
       - alert: ContainerRestartingTooMuch
         expr: changes(container_start_time_seconds{name=~"prometheus|grafana|node_exporter|process_exporter|cadvisor|alertmanager"}[2m]) > 0
