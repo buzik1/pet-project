@@ -1,7 +1,7 @@
 groups:
   - name: loki_alerts
     rules:
-      - alert: HighErrorRate
+      - alert: high_error_rate
         expr: sum by (container) (count_over_time({container=~".+"}| logfmt | level = "error" | msg !~ "executing query" [10m])) > 10
         for: 1m
         labels:
@@ -10,7 +10,7 @@ groups:
           summary: "Ошибки в логах контейнера {{ $labels.container }}"
           description: "Container has {{ $value }} errors in the last 10 minutes"
 
-      - alert: PanicOrFatal
+      - alert: panic_or_fatal
         expr: sum by (container) (count_over_time({container=~".+"} !~ "(?i)GetRuleGroup unsupported" !~ "(?i)evaluator_local\\.go" !~ "query=.*panic|fatal" |~ "(?i)panic|fatal"[5m])) > 1
         for: 1m
         labels:
