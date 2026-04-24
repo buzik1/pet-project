@@ -11,7 +11,7 @@ groups:
           description: "Container has {{ $value }} errors in the last 10 minutes"
 
       - alert: PanicOrFatal
-        expr: sum by (container) (count_over_time({container=~".+"} !~ "query=.*panic|fatal" |~ "(?i)panic|fatal"[5m])) > 0
+        expr: sum by (container) (count_over_time({container=~".+"} !~ "(?i)GetRuleGroup unsupported" !~ "(?i)evaluator_local\\.go" !~ "query=.*panic|fatal" |~ "(?i)panic|fatal"[5m])) > 1
         for: 1m
         labels:
           severity: disaster
