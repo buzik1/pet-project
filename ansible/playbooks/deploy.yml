@@ -93,12 +93,6 @@
         dest: /opt/pet-project/tempo-config.yml
         mode: '0644'
 
-    - name: Copy alloy-config.alloy to target
-      copy:
-        src: ../../alloy-config.alloy
-        dest: /opt/pet-project/alloy-config.alloy
-        mode: '0644'
-
     - name: Remove orphaned containers
       command: docker-compose down --remove-orphans
       args:
