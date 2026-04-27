@@ -10,6 +10,7 @@ services:
       - ./Alerts.yml:/etc/prometheus/Alerts.yml:ro
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--enable-feature=otlp-receiver'
     networks:
       - network_monitoring
     restart: unless-stopped
@@ -66,6 +67,34 @@ services:
     networks:
       - network_monitoring    
 
+  tempo:
+    image: grafana/tempo:latest
+    container_name: tempo
+    restart: unless-stopped
+    volumes:
+      - ./tempo-config.yml:/etc/tempo/tempo.yaml:ro
+      - tempo-data:/var/tempo
+    command: -config.file=/etc/tempo/tempo.yaml
+    ports:
+      - "3200:3200"   # API для Grafana
+      - "4317:4317"   # OTLP gRPC
+      - "4318:4318"   # OTLP HTTP
+    networks:
+      - network_monitoring
+
+  alloy:
+    image: grafana/alloy:latest
+    container_name: alloy
+    restart: unless-stopped
+    volumes:
+      - ./alloy-config.alloy:/etc/alloy/config.alloy:ro
+    ports:
+      - "4317:4317"   # OTLP gRPC
+      - "4318:4318"   # OTLP HTTP
+    networks:
+      - network_monitoring
+    command: run --server.http.listen-addr=0.0.0.0:12345 --storage.path=/var/lib/alloy/data /etc/alloy/config.alloy
+
   alertmanager:
     image: prom/alertmanager:latest
     container_name: alertmanager
@@ -117,6 +146,7 @@ volumes:
   grafana-storage:
   prometheus-data:
   loki-data:
+  tempo-data:
 
 networks:
   network_monitoring:
