@@ -1,6 +1,4 @@
-// Конфигурация для Grafana Alloy
-
-// 1. Настраиваем получение трейсов по протоколу OTLP
+// Принимаем OTLP‑трейсы (например, от Loki или будущих сервисов)
 otelcol.receiver.otlp "default" {
     http {}
     grpc {}
@@ -9,34 +7,19 @@ otelcol.receiver.otlp "default" {
     }
 }
 
-// 2. Группируем трейсы в батчи для эффективной отправки
+// Группируем трейсы в батчи
 otelcol.processor.batch "default" {
     output {
         traces = [otelcol.exporter.otlp.tempo.input]
     }
 }
 
-// 3. Отправляем трейсы напрямую в наш сервис Tempo
+// Отправляем трейсы в Tempo
 otelcol.exporter.otlp "tempo" {
     client {
         endpoint = "http://tempo:4317"
         tls {
             insecure = true
         }
-    }
-}
-
-// 4. Генерируем синтетические трейсы для теста
-otelcol.receiver.synthetic_trace "test_traces" {
-    interval = "30s"
-    trace {
-        name = "test-trace-from-alloy"
-        spans = [
-            { name = "span-1", duration = "50ms" },
-            { name = "span-2", duration = "100ms" },
-        ]
-    }
-    output {
-        traces = [otelcol.processor.batch.default.input]
     }
 }

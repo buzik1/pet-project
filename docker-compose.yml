@@ -46,7 +46,10 @@ services:
       - ./loki-config.yml:/etc/loki/local-config.yaml:ro
       - loki-data:/loki
       - ./loki-alerts.yml:/loki/rules/fake/loki-alerts.yml:ro
-    command: -config.file=/etc/loki/local-config.yaml
+    command: 
+      - -config.file=/etc/loki/local-config.yaml
+      - -tracing.enabled=true
+      - -tracing.endpoint=tempo:4317
     ports:
       - "3100:3100"
     networks:

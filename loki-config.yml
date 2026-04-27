@@ -48,10 +48,3 @@ ruler:
 limits_config:
   retention_period: 24h
   max_entries_limit_per_query: 5000
-
-tracing:
-  enabled: true
-  type: otlp
-  otlp:
-    endpoint: tempo:4317        # gRPC Tempo
-    insecure: true

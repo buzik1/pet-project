@@ -1,28 +1,27 @@
-# Минимальная конфигурация для single‑ноды
 stream_over_http_enabled: true
 
 server:
-  http_listen_port: 3200          # порт для API и запросов от Grafana
+  http_listen_port: 3200
 
 distributor:
   receivers:
-    otlp:                          # принимаем трейсы по OpenTelemetry Protocol
+    otlp:
       protocols:
         http:
-          endpoint: 0.0.0.0:4318   # HTTP‑порт для OTLP/HTTP
+          endpoint: 0.0.0.0:4318
         grpc:
-          endpoint: 0.0.0.0:4317   # gRPC‑порт для OTLP/gRPC
+          endpoint: 0.0.0.0:4317
 
-ingester:
-  max_block_duration: 5m           # максимальная длительность блока перед сбросом на диск
-
-compactor:
-  compaction:
-    block_retention: 24h           # храним трейсы 48 часов
+services:
+  ingester:
+    max_block_duration: 5m
+  compactor:
+    compaction:
+      block_retention: 48h
 
 storage:
   trace:
-    backend: local                 # используем локальную файловую систему
+    backend: local
     local:
       path: /var/tempo/traces
     wal:
