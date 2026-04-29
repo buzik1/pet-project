@@ -20,7 +20,7 @@ groups:
           description: "Обнаружены критические сообщения panic/fatal в контейнере {{ $labels.container }}. Количество={{ $value }}"
 
       - alert: status_not_200
-        expr: sum by (container) (count_over_time({container=~".+"}| logfmt| status !~ "200|201|204|301|302|304|ok"| status != "" !~ "query=.*status.*"[5m])) > 10
+        expr: sum by (container) (count_over_time({container=~".+"}| logfmt| status !~ "200|201|202|204|301|302|304|ok"| status != "" !~ "query=.*status.*"[5m])) > 10
         for: 1m
         labels:
           severity: disaster
