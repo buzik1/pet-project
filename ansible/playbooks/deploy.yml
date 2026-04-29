@@ -23,9 +23,9 @@
       copy:
         content: "{{ vault_slack_webhook_url }}"
         dest: /opt/pet-project/secrets/slack_webhook_url
-        mode: '0600'
-        owner: root
-        group: root
+        mode: '0640'
+        owner: '65534'
+        group: '65534'
 
     - name: Ensure Docker service is running
       service:
