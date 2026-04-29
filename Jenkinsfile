@@ -19,11 +19,18 @@ pipeline {
 
         stage('Run Ansible Playbook') {
             steps {
-                echo 'Deploying application using Ansible...'
+                echo 'Deploying application using Ansible with Vault...'
                 dir('ansible') {
-                    sh '''
-                    ansible-playbook -i inventory/production.yml playbooks/deploy.yml
-                    '''
+                    withCredentials([string(credentialsId: 'ansible-vault-password', variable: 'VAULT_PASS')]) {
+                        sh '''
+                            # Создаём временный файл с паролем Vault
+                            echo "$VAULT_PASS" > ../.vault_pass
+                            # Запускаем плейбук с передачей пароля
+                            ansible-playbook -i inventory/production.yml playbooks/deploy.yml --vault-password-file ../.vault_pass
+                            # Удаляем временный файл с паролем
+                            rm -f ../.vault_pass
+                        '''
+                    }
                 }
             }
         }

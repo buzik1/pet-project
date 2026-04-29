@@ -2,6 +2,8 @@
 - name: Deploy Docker Compose application with monitoring stack
   hosts: all
   become: yes
+  vars_files:
+    - ../../vault.yml
   tasks:
     - name: Ensure Docker and Docker Compose are installed
       apt:
@@ -10,6 +12,20 @@
           - docker-compose
         state: present
         update_cache: yes
+
+    - name: Ensure secrets directory exists
+      file:
+        path: /opt/pet-project/secrets
+        state: directory
+        mode: '0700'
+
+    - name: Create Slack webhook URL file from Vault
+      copy:
+        content: "{{ vault_slack_webhook_url }}"
+        dest: /opt/pet-project/secrets/slack_webhook_url
+        mode: '0600'
+        owner: root
+        group: root
 
     - name: Ensure Docker service is running
       service:
