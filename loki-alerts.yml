@@ -2,7 +2,7 @@ groups:
   - name: loki_alerts
     rules:
       - alert: high_error_rate
-        expr: sum by (container) (count_over_time({container=~".+"}| logfmt | level = "error" | msg !~ "executing query" [10m])) > 10
+        expr: sum by (container) (count_over_time({container=~".+"}| logfmt| level="error"| msg!~"executing query|empty ring|context canceled|Failed to install plugin|error getting ingester clients"[10m])) > 10
         for: 1m
         labels:
           severity: high
