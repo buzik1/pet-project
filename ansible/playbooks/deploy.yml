@@ -7,7 +7,7 @@
   tasks:
     - name: Ensure Docker and Docker Compose are installed
       apt:
-        name:
+        namekk:
           - docker.io
           - docker-compose
         state: present
