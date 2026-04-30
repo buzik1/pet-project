@@ -21,4 +21,4 @@ receivers:
           *Alert:* {{ .Annotations.summary }}
           *Description:* {{ .Annotations.description }}
           *Severity:* `{{ .Labels.severity }}`
-          {{ end }}
+          {{ end 
