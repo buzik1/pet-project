@@ -9,7 +9,7 @@ datasources:
     editable: true
     jsonData:
       tracesToLogsV2:
-        datasourceUid: 'loki'          # UID вашего источника Loki
+        datasourceUid: 'loki'
         spanStartTimeShift: '-1h'
         spanEndTimeShift: '1h'
         filterByTraceID: true
