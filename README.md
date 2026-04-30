@@ -8,6 +8,7 @@
 ![Chat](https://img.shields.io/badge/Chat-Slack-4A154B?logo=slack)
 ![Loki](https://img.shields.io/badge/Logs-Loki-orange?logo=grafana)
 ![Visualization](https://img.shields.io/badge/Visualization-Grafana-orange?logo=grafana)
+![Secrets](https://img.shields.io/badge/Secrets-Ansible_Vault-black?logo=ansible)
 
 > **Ключевая особенность:** Вся конфигурация инфраструктуры и пайплайн деплоя хранятся в GitHub.  
 > Изменение настроек мониторинга или добавление новых целей, экспортеров происходит автоматически при пуше в репозиторий.
@@ -22,7 +23,7 @@
 
 | Сервер | Роль | Компоненты |
 |--------|------|------------|
-| **`vm-ansible`** | Control Plane | Jenkins (CI/CD), Ansible, Git |
+| **`vm-ansible`** | Control Plane | Jenkins (CI/CD), Ansible, Ansible-vault, Git |
 | **`vm-mon1`** | Monitoring Stack | Prometheus, Grafana, Alertmanager, Node Exporter, Process Exporter, cAdvisor, Loki, Promtail |
 
 **Схема работы CI/CD:**
@@ -58,6 +59,7 @@
 | **Node Exporter** | Метрики операционной системы (CPU, RAM, диск, сеть) |
 | **Process Exporter** | Детальные метрики по процессам |
 | **cAdvisor** | Мониторинг контейнеров |
+| **Ansible Vault** | Шифрование и безопасное хранение секретов (токены, пароли) прямо в Git |
 
 
 ---
@@ -76,6 +78,8 @@
 - [x] Интеграция Grafana с Alertmanager для отправки нотификаций на основе логов
 - [x] Централизованный сбор логов контейнеров с помощью Promtail
 - [x] Хранение логов в Loki
+- [x] Безопасное хранение и деплой секретов с помощью Ansible Vault
+- [x] Уведомления о статусе сборок Jenkins в Slack
 
 ---
 
@@ -111,11 +115,15 @@
 **Решение:**
 - Алерты по логам были перенесены из UI Grafana Alerting во встроенный компонент **Ruler** в Loki.
 - Создан файл `loki-alerts.yml`, содержащий правила алертов в формате Prometheus.
-- В конфигурации Loki (`loki-config.yml`) добавлена секция `ruler` с подключением правил и указанием Alertmanager.
-- Файл правил монтируется в контейнер Loki через volume в `docker-compose.yml`.
-- Loki теперь самостоятельно оценивает правила и напрямую отправляет алерты в Alertmanager, минуя Grafana.
-
+- Loki самостоятельно оценивает правила и напрямую отправляет алерты в Alertmanager, минуя Grafana.
 Таким образом, алерты по логам обрабатываются нативно в Loki и не зависят от особенностей Grafana Alerting, что исключило ложные авторезолвы и повысило надёжность системы оповещения.
+
+### 4. Безопасное управление секретами и уведомления о CI/CD
+
+**Проблема:** Секреты (Slack Webhook URL, пароли) хранились в открытых файлах на сервере, что делало проект уязвимым. При смене инфраструктуры приходилось вручную переносить секретные данные на новое окружение.
+
+**Решение:**
+- **Внедрен Ansible Vault:** Секреты зашифрованы в `vault.yml` и хранятся прямо в Git-репозитории. Ansible автоматически расшифровывает при деплое.
 
 
 ## 📈 Планы по развитию
