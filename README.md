@@ -69,17 +69,16 @@
 - [x] Развертывание полного стека мониторинга одной командой (`docker-compose up -d`)
 - [x] Автоматический деплой изменений через Jenkins + Ansible
 - [x] Мониторинг серверов
-- [x] Сбор метрик ОС через Node Exporter
-- [x] Сбор метрик процессов через Process Exporter
-- [x] Сбор метрик контейнеров через cAdvisor
+- [x] Сбор метрик с помощью экспортеров  Prometheus
 - [x] Визуализация данных в Grafana
 - [x] Настроена отправка нотификаций из Prometheus в Alertmanager
-- [x] Интеграция Alertmanager со Slack через Incoming Webhook
-- [x] Интеграция Grafana с Alertmanager для отправки нотификаций на основе логов, метрик, трейсов
+- [x] Интеграция Alertmanager со Slack через Incoming Webhook (channel #alertmanager)
+- [x] Интеграция Grafana с Alertmanager для отправки нотификаций на основе логов, метрик, трейсов (UI Grafana)
 - [x] Централизованный сбор логов контейнеров с помощью Promtail
 - [x] Хранение логов в Loki
+- [x] Интеграция Loki с Alertmanager для отправки нотификаций на основе логов (loki-alerts.yml)
 - [x] Безопасное хранение и деплой секретов с помощью Ansible Vault
-- [x] Уведомления о статусе сборок Jenkins в Slack  channel #builds
+- [x] Уведомления о статусе сборок Jenkins в Slack (channel #builds)
 
 ---
 
