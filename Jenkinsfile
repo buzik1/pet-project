@@ -7,6 +7,7 @@ pipeline {
 
     environment {
         ANSIBLE_HOST_KEY_CHECKING = 'false'
+        ANSIBLE_SSH_KEY = '/var/lib/jenkins/.ssh/ansible_key'
     }
 
     stages {
