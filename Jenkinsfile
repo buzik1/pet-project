@@ -18,6 +18,22 @@ pipeline {
             }
         }
 
+        // ✅ Новая стадия проверки YAML-файлов
+        stage('Validate YAML configs') {
+            steps {
+                echo 'Checking YAML syntax...'
+                sh '''
+                    # Найти все .yml и .yaml файлы, исключая зашифрованный vault.yml
+                    find . -type f \\( -name "*.yml" -o -name "*.yaml" \\) ! -name "vault.yml" -print0 | xargs -0 yamllint -d relaxed
+                    if [ $? -ne 0 ]; then
+                        echo "❌ YAML syntax errors found! Fix them before deploying."
+                        exit 1
+                    fi
+                    echo "✅ All YAML files look good."
+                '''
+            }
+        }
+
         stage('Run Ansible Playbook') {
             steps {
                 echo 'Deploying application using Ansible with Vault...'
