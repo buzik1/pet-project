@@ -18,7 +18,20 @@ pipeline {
             }
         }
 
-        // ✅ проверка YAML-файлов
+        // ✅ Новая стадия: получаем сообщение последнего коммита
+        stage('Get Commit Info') {
+            steps {
+                script {
+                    env.GIT_COMMIT_MSG = sh(
+                        script: "git log -1 --pretty=format:%s",
+                        returnStdout: true
+                    ).trim()
+                    .replace('"', '\\"')
+                    .replace('`', '\\`')
+                }
+            }
+        }
+
         stage('Validate YAML configs') {
             steps {
                 echo 'Checking YAML syntax...'
@@ -55,7 +68,7 @@ pipeline {
                 tokenCredentialId: 'builds_bot_token',
                 channel: '#builds',
                 color: 'good',
-                message: "✅ Сборка *${env.JOB_NAME}* #${env.BUILD_NUMBER} прошла успешно.\n${env.BUILD_URL}"
+                message: "✅ Сборка *${env.JOB_NAME}* #${env.BUILD_NUMBER} прошла успешно.\nCommit: `${env.GIT_COMMIT_MSG}`\n${env.BUILD_URL}"
             )
             echo 'Deployment successful!'
         }
@@ -64,7 +77,7 @@ pipeline {
                 tokenCredentialId: 'builds_bot_token',
                 channel: '#builds',
                 color: 'danger',
-                message: "❌ Сборка *${env.JOB_NAME}* #${env.BUILD_NUMBER} завершилась неудачей.\n${env.BUILD_URL}"
+                message: "❌ Сборка *${env.JOB_NAME}* #${env.BUILD_NUMBER} завершилась неудачей.\nCommit: `${env.GIT_COMMIT_MSG}`\n${env.BUILD_URL}"
             )
             echo 'Deployment failed. Check the logs.'
         }
