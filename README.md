@@ -1,4 +1,4 @@
-# Pet Project: Мониторинг с CI/CD
+# Monitoring with CI/CD
 
 ![CI/CD](https://img.shields.io/badge/CI/CD-Jenkins-blue?logo=jenkins)
 ![Automation](https://img.shields.io/badge/Automation-Ansible-black?logo=ansible)
