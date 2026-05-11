@@ -23,7 +23,7 @@
 
 | Сервер | Роль | Компоненты |
 |--------|------|------------|
-| **`vm-ansible`** | Control Plane | Jenkins (CI/CD), Ansible, Ansible-vault, Git, Yamllint |
+| **`vm-ansible`** | Control Plane | Jenkins (CI/CD), Ansible, Ansible-vault, Git, yamllint |
 | **`vm-mon1`** | Monitoring Stack | Prometheus, Grafana, Alertmanager, Node Exporter, Process Exporter, cAdvisor, Loki, Promtail |
 
 **Схема работы CI/CD:**
@@ -61,7 +61,7 @@
 | **Process Exporter** | Детальные метрики по процессам |
 | **cAdvisor** | Мониторинг контейнеров |
 | **Ansible Vault** | Шифрование и безопасное хранение секретов (токены, пароли) прямо в Git |
-| **yamllint** | Автоматическая проверка синтаксиса всех YAML-конфигураций в пайплайне Jenkins |
+| **yamllint** | Автоматическая проверка синтаксиса YAML-конфигураций в пайплайне Jenkins |
 
 
 ---
@@ -117,7 +117,7 @@
 **Решение:**
 - Алерты по логам были перенесены из UI Grafana Alerting во встроенный компонент **Ruler** в Loki.
 - Создан файл `loki-alerts.yml`, содержащий правила алертов в формате Prometheus.
-- Loki самостоятельно оценивает правила и напрямую отправляет алерты в Alertmanager, минуя Grafana.
+- Loki самостоятельно оценивает правила и напрямую отправляет нотификации в Alertmanager, минуя Grafana.
 Таким образом, алерты по логам обрабатываются нативно в Loki и не зависят от особенностей Grafana Alerting, что исключило ложные авторезолвы и повысило надёжность системы оповещения.
 
 ### 4. Безопасное управление секретами
