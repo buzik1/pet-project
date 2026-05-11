@@ -18,7 +18,6 @@ pipeline {
             }
         }
 
-        // ✅ Новая стадия: получаем сообщение последнего коммита
         stage('Get Commit Info') {
             steps {
                 script {
