@@ -23,7 +23,6 @@ pipeline {
             steps {
                 echo 'Checking YAML syntax...'
                 sh '''
-                    # Найти все .yml и .yaml файлы, исключая зашифрованный vault.yml
                     find . -type f \\( -name "*.yml" -o -name "*.yaml" \\) ! -name "vault.yml" -print0 | xargs -0 yamllint -d relaxed
                     if [ $? -ne 0 ]; then
                         echo "❌ YAML syntax errors found! Fix them before deploying."
@@ -56,7 +55,7 @@ pipeline {
                 tokenCredentialId: 'builds_bot_token',
                 channel: '#builds',
                 color: 'good',
-                message: "✅ Сборка *${env.JOB_NAME}* #${env.BUILD_NUMBER} прошла успешно.\nCommit: `${env.GIT_COMMIT_MESSAGE}`\n${env.BUILD_URL}"
+                message: "✅ Сборка *${env.JOB_NAME}* #${env.BUILD_NUMBER} прошла успешно.\n${env.BUILD_URL}"
             )
             echo 'Deployment successful!'
         }
@@ -65,7 +64,7 @@ pipeline {
                 tokenCredentialId: 'builds_bot_token',
                 channel: '#builds',
                 color: 'danger',
-                message: "❌ Сборка *${env.JOB_NAME}* #${env.BUILD_NUMBER} завершилась неудачей.\nCommit: `${env.GIT_COMMIT_MESSAGE}`\n${env.BUILD_URL}"
+                message: "❌ Сборка *${env.JOB_NAME}* #${env.BUILD_NUMBER} завершилась неудачей.\n${env.BUILD_URL}"
             )
             echo 'Deployment failed. Check the logs.'
         }
