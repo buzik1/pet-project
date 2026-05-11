@@ -56,7 +56,7 @@ pipeline {
                 tokenCredentialId: 'builds_bot_token',
                 channel: '#builds',
                 color: 'good',
-                message: "✅ Сборка *${env.JOB_NAME}* #${env.BUILD_NUMBER} прошла успешно.\n${env.BUILD_URL}"
+                message: "✅ Сборка *${env.JOB_NAME}* #${env.BUILD_NUMBER} прошла успешно.\nCommit: `${env.GIT_COMMIT_MESSAGE}`\n${env.BUILD_URL}"
             )
             echo 'Deployment successful!'
         }
@@ -65,7 +65,7 @@ pipeline {
                 tokenCredentialId: 'builds_bot_token',
                 channel: '#builds',
                 color: 'danger',
-                message: "❌ Сборка *${env.JOB_NAME}* #${env.BUILD_NUMBER} завершилась неудачей.\n${env.BUILD_URL}"
+                message: "❌ Сборка *${env.JOB_NAME}* #${env.BUILD_NUMBER} завершилась неудачей.\nCommit: `${env.GIT_COMMIT_MESSAGE}`\n${env.BUILD_URL}"
             )
             echo 'Deployment failed. Check the logs.'
         }
