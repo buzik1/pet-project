@@ -14,12 +14,6 @@ services:
     networks:
       - network_monitoring
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://prometheus:9090/-/ready"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
 
   node_exporter:
     image: quay.io/prometheus/node-exporter:latest
@@ -29,12 +23,6 @@ services:
     networks:
       - network_monitoring
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://node_exporter:9100/metrics"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
 
   grafana:
     image: grafana/grafana:latest
@@ -49,12 +37,6 @@ services:
     networks:
       - network_monitoring
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD-SHELL", "wget --spider -q http://grafana:3000/api/health || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
 
   loki:
     image: grafana/loki:3.6.0
@@ -70,12 +52,6 @@ services:
       - "3100:3100"
     networks:
       - network_monitoring
-    healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://loki:3100/ready"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
 
   promtail:
     image: grafana/promtail:3.6.0
@@ -91,12 +67,6 @@ services:
       - "9080:9080"
     networks:
       - network_monitoring
-    healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://promtail:9080/ready"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
 
   tempo:
     image: grafana/tempo:2.6.0
@@ -112,12 +82,6 @@ services:
       - "4318:4318"
     networks:
       - network_monitoring
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://tempo:3200/ready"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
 
   alertmanager:
     image: prom/alertmanager:latest
@@ -133,12 +97,6 @@ services:
       - "9093:9093"
     networks:
       - network_monitoring
-    healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://alertmanager:9093/-/ready"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
 
   process_exporter:
     image: ncabatoff/process-exporter:latest
@@ -156,12 +114,6 @@ services:
     networks:
       - network_monitoring
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://process_exporter:9256/metrics"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:latest
