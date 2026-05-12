@@ -5,7 +5,7 @@ groups:
         expr: up == 0
         for: 10s
         labels:
-          severity: critical
+          severity: high
         annotations:
           summary: "instance {{ $labels.job }} is a down"
           description: "instance_is_down"
@@ -25,7 +25,7 @@ groups:
         expr: round((node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100) < 10
         for: 5m
         labels:
-          severity: critical
+          severity: high
         annotations:
           summary: "Нехватка оперативной памяти на {{ $labels.job }}"
           description: "Доступно менее 10% ОЗУ (текущее значение: {{ $value }}%)."
@@ -34,7 +34,7 @@ groups:
         expr: round((node_filesystem_avail_bytes{ mountpoint="/etc/hosts"} / node_filesystem_size_bytes{ mountpoint="/etc/hosts"}) * 100) < 10
         for: 5m
         labels:
-          severity: critical
+          severity: high
         annotations:
           summary: "Заканчивается место на диске ({{ $labels.job }})"
           description: "Свободно менее 10% на корневом разделе / (текущее значение: {{ $value }}%)."
@@ -54,7 +54,7 @@ groups:
         expr: namedprocess_namegroup_num_procs{groupname=~"prometheus|alertmanager|grafana"} == 0
         for: 1m
         labels:
-          severity: critical
+          severity: high
         annotations:
           summary: "Критический процесс {{ $labels.groupname }} не запущен"
           description: "Процесс {{ $labels.groupname }} не обнаружен на сервере {{ $labels.job }} более 1 минуты."
@@ -83,7 +83,7 @@ groups:
         expr: absent(container_last_seen{name=~"prometheus|grafana|node_exporter|process_exporter|cadvisor|alertmanager"})
         for: 2m
         labels:
-          severity: critical
+          severity: high
         annotations:
           summary: "Контейнер {{ $labels.name }} не запущен"
           description: "Контейнер {{ $labels.name }} отсутствует в метриках более 2 минут на сервере {{ $labels.job }}"
