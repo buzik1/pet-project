@@ -109,6 +109,15 @@
         dest: /opt/pet-project/tempo-config.yml
         mode: '0644'
 
+    - name: Create .env file with Grafana admin password from Vault
+      copy:
+        content: |
+          GF_SECURITY_ADMIN_PASSWORD={{ vault_grafana_admin_password }}
+        dest: /opt/pet-project/.env
+        mode: '0600'
+        owner: root
+        group: root
+
     - name: Remove orphaned containers
       command: docker-compose down --remove-orphans
       args:
