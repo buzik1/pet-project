@@ -4,7 +4,7 @@
 ![Automation](https://img.shields.io/badge/Automation-Ansible-black?logo=ansible)
 ![Infra](https://img.shields.io/badge/Infrastructure-Docker-blue?logo=docker)
 ![Monitoring](https://img.shields.io/badge/Monitoring-Prometheus-orange?logo=prometheus)
-![Alerting](https://img.shields.io/badge/Alerting-Alertmanager-red?logo=prometheus)
+![Alerting](https://img.shields.io/badge/Alerting-Alertmanager-orange?logo=prometheus)
 ![Chat](https://img.shields.io/badge/Chat-Slack-4A154B?logo=slack)
 ![Loki](https://img.shields.io/badge/Logs-Loki-orange?logo=grafana)
 ![Visualization](https://img.shields.io/badge/Visualization-Grafana-orange?logo=grafana)
