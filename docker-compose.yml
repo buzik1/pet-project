@@ -85,7 +85,7 @@ services:
       - network_monitoring
 
   alertmanager:
-    image: prom/alertmanager:latest
+    image: prom/alertmanager:v0.27.0
     container_name: alertmanager
     restart: unless-stopped
     volumes:
