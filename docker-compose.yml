@@ -20,6 +20,14 @@ services:
     container_name: node_exporter
     ports:
       - "9100:9100"
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--path.rootfs=/rootfs'
     networks:
       - network_monitoring
     restart: unless-stopped
