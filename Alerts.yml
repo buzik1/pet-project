@@ -31,13 +31,13 @@ groups:
           description: "Доступно менее 10% ОЗУ (текущее значение: {{ $value }}%)."
 
       - alert: HostOutOfDiskSpace
-        expr: round((node_filesystem_avail_bytes{ mountpoint="/etc/hosts"} / node_filesystem_size_bytes{ mountpoint="/etc/hosts"}) * 100) < 10
+        expr: round((node_filesystem_avail_bytes / node_filesystem_size_bytes) * 100) < 10
         for: 5m
         labels:
           severity: high
         annotations:
-          summary: "Заканчивается место на диске ({{ $labels.job }})"
-          description: "Свободно менее 10% на корневом разделе / (текущее значение: {{ $value }}%)."
+          summary: "Заканчивается место на диске {{ $labels.job }} в разделе {{ $labels.mountpoint }}"
+          description: "Свободно менее 10%. Текущее значение: {{ $value }}%"
 
       - alert: HostHighMemoryUsage
         expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 90
