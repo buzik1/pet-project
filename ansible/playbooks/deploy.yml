@@ -128,4 +128,3 @@
       docker_compose:
         project_src: /opt/pet-project
         state: present
-        restarted: yes
