@@ -108,7 +108,7 @@ services:
       - network_monitoring
 
   process_exporter:
-    image: ncabatoff/process-exporter:latest
+    image: ncabatoff/process-exporter:0.8.7
     container_name: process_exporter
     hostname: process_exporter
     ports:
