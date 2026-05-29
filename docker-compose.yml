@@ -125,7 +125,7 @@ services:
     restart: unless-stopped
 
   cadvisor:
-    image: gcr.io/cadvisor/cadvisor:v0.57.0
+    image: gcr.io/cadvisor/cadvisor:v0.56.1
     container_name: cadvisor
     restart: unless-stopped
     privileged: true
